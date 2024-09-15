@@ -9,6 +9,7 @@ use crate::core::is_default;
 use crate::core::macros::MergeRight;
 use crate::core::merge_right::MergeRight;
 use crate::core::mustache::Mustache;
+use crate::core::valid::Valid;
 use crate::core::valid::Validator;
 
 mod defaults {
