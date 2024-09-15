@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::sync::Arc;
 
-use crate::core::valid::{Valid, Validator};
+use crate::core::valid::{Valid, ValidationError, Validator};
 use serde_yaml::Value;
 
 pub trait MergeRight {
@@ -14,7 +14,7 @@ impl<A: MergeRight> MergeRight for Option<A> {
             (Some(this), Some(that)) => Some(this.merge_right(that)),
             (None, Some(that)) => Some(that),
             (Some(this), None) => Some(this),
-            (None, None) => None,
+            (None, None) => Valid::succeed(None),
         }
     }
 }
@@ -79,9 +79,19 @@ impl<V> MergeRight for HashSet<V>
 where
     V: Eq + std::hash::Hash,
 {
-    fn merge_right(mut self, other: Self) -> Self {
+    fn merge_right(mut self, other: Self) -> Valid<Self, String> {
         self.extend(other);
-        self
+        Valid::succeed(self)
+    }
+}
+
+impl<K, V> MergeRight for HashMap<K, V>
+where
+    K: Eq + std::hash::Hash,
+{
+    fn merge_right(mut self, other: Self) -> Valid<Self, String> {
+        self.extend(other);
+        Valid::succeed(self)
     }
 }
 
