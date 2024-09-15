@@ -152,10 +152,10 @@ impl Extensions {
 }
 
 impl MergeRight for FileDescriptorSet {
-    fn merge_right(mut self, other: Self) -> Self {
+    fn merge_right(mut self, other: Self) -> Valid<Self, String> {
         self.file.extend(other.file);
 
-        self
+        Valid::succeed(self)
     }
 }
 
