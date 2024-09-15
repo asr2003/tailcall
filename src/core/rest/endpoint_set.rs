@@ -9,7 +9,7 @@ use crate::core::macros::MergeRight;
 use crate::core::merge_right::MergeRight;
 use crate::core::rest::operation::OperationQuery;
 use crate::core::runtime::TargetRuntime;
-use crate::core::valid::Validator;
+use crate::core::valid::{Valid, Validator};
 
 /// Collection of endpoints
 #[derive(Default, Clone, Debug, MergeRight)]
