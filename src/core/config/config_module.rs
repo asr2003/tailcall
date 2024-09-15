@@ -48,8 +48,9 @@ impl From<Config> for Cache {
 }
 
 impl MergeRight for Cache {
-    fn merge_right(self, other: Self) -> Self {
-        Cache::from(self.config.merge_right(other.config))
+    fn merge_right(self, other: Self) -> Valid<Self, String> {
+        let merged_config = self.config.merge_right(other.config)?;
+        Valid::succeed(Cache::from(merged_config))
     }
 }
 
