@@ -1,5 +1,6 @@
 extern crate proc_macro;
 
+use crate::core::valid::Valid;
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::spanned::Spanned;
@@ -80,7 +81,7 @@ pub fn expand_merge_right_derive(input: TokenStream) -> TokenStream {
                     }
                 } else {
                     quote! {
-                        #name: self.#name.merge_right(other.#name),
+                        #name: self.#name.merge_right(other.#name)?,
                     }
                 }
             });
@@ -95,7 +96,7 @@ pub fn expand_merge_right_derive(input: TokenStream) -> TokenStream {
 
             quote! {
                 impl #generics_del MergeRight for #name #generics_del {
-                    fn merge_right(self, other: Self) -> Self {
+                    fn merge_right(self, other: Self) -> Valid<Self, String> {
                         Self {
                             #(#merge_logic)*
                         }
@@ -106,8 +107,8 @@ pub fn expand_merge_right_derive(input: TokenStream) -> TokenStream {
         // Implement for enums
         Data::Enum(_) => quote! {
             impl MergeRight for #name {
-                fn merge_right(self, other: Self) -> Self {
-                    other
+                fn merge_right(self, other: Self) -> Valid<Self, String> {
+                    Valid::succeed(other)
                 }
             }
         },
