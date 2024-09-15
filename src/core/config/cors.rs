@@ -1,3 +1,4 @@
+use crate::core::Valid;
 use hyper::header;
 use serde::{Deserialize, Serialize};
 
